@@ -36,24 +36,56 @@ for (int j=3;j>0;j--) {
     for (int i = 0; i<100;i++)
         sleep_timer.sleep();
 }
-
+//move the robot from elevator to the first turn
 int niters = 1200; //1000 iters at 100Hz is 10 seconds;
-//iteration counter; at 10ms/iteration, and 0.2m/sec, expect 2mm/iter
-// should move by 2m over 10 sec
 for (int i=0;i<niters;i++) {
     cmd_publisher.publish(twist_cmd); // really, should only need to publish this once, but no hard done
     sleep_timer.sleep(); // sleep for (remainder of) 10m
 }
+
+//turns the robot right at the first turn
 twist_cmd.linear.x = 0.0;
 twist_cmd.angular.z = -0.314;
-niters=500; // 5 sec
+niters = 500; // 5 sec
 ROS_INFO("Time to rotate negative");
 for (int i=0;i<niters;i++) {
     cmd_publisher.publish(twist_cmd); // really, should only need to publish this once, but no hard done
     sleep_timer.sleep(); // sleep for (remainder of) 10m
 }
+
+//goes down the hallway after the first turn
+twist_cmd.linear.x = 0.4;
+twist_cmd.angular.z = 0.0;
+niters = 3000; //1000 iters at 100Hz is 10 seconds;
+ROS_INFO("Time move down the hall");
+for (int i=0;i<niters;i++) {
+    cmd_publisher.publish(twist_cmd); // really, should only need to publish this once, but no hard done
+    sleep_timer.sleep(); // sleep for (remainder of) 10m
+}
+
+//turns the robot towards the hallway towards the vending machine
+twist_cmd.linear.x = 0.0;
+twist_cmd.angular.z = -0.300;
+niters = 500; // 5 sec
+ROS_INFO("Time to rotate negative");
+for (int i=0;i<niters;i++) {
+    cmd_publisher.publish(twist_cmd); // really, should only need to publish this once, but no hard done
+    sleep_timer.sleep(); // sleep for (remainder of) 10m
+}
+
+//moves the robot towoards the vending machine
+twist_cmd.linear.x = 0.4;
+twist_cmd.angular.z = 0.0;
+niters =1800; //1000 iters at 100Hz is 10 seconds;
+ROS_INFO("Time move down the hall towards vending machine");
+for (int i=0;i<niters;i++) {
+    cmd_publisher.publish(twist_cmd); // really, should only need to publish this once, but no hard done
+    sleep_timer.sleep(); // sleep for (remainder of) 10m
+}
+
+//end of path   and set everyhing everything to 0 for twist_cmd
 ROS_INFO("my work here is done");
-//while (ros::ok()) 
+while (ros::ok()) 
 {
 twist_cmd.linear.x = 0.0;
 twist_cmd.angular.z = 0;
